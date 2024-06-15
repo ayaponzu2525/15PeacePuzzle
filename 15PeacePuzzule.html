@@ -135,14 +135,14 @@
     panel[3] = orders +4;
     console.log("6,7,10,11");
   }else if (orders == 2 || orders == 3 || orders == 5 || orders == 8 || orders == 9 || orders == 12 || orders == 14 || orders == 15){//真ん中と角四つ以外
-    if(orders % 4 == 3){//左端
+    if(orders % 4 == 1){//左端
         delete panel[0];
         panel[1] = orders -4;
         panel[2] = orders +1;
         panel[3] = orders +4;
         console.log("5,9");
     }else if(orders %4 == 2){
-        if (orders /4 == 0){//2
+        if (orders == 2){//2 //ここだめ
             panel[0] = orders -1;
             delete panel[1];
             panel[2] = orders +1;
@@ -155,8 +155,8 @@
             delete panel[3]
             console.log("14");
         }
-    }else if (orders %4 == 1){
-        if(orders /4 == 0){//3
+    }else if (orders %4 == 3){
+        if(orders == 3){//3 //ここだめ
             panel[0] = orders -1;
             delete panel[1];
             panel[2] = orders +1;
