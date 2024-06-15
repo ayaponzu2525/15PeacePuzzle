@@ -124,7 +124,7 @@
   shufflePieces();
   component();
 
-  var orders = model[15]
+  var orders = model[15]//空白ブロック
   console.log(orders);
   panel = [];
 
@@ -133,23 +133,27 @@
     panel[1] = orders -4;
     panel[2] = orders +1;
     panel[3] = orders +4;
+    console.log("6,7,10,11");
   }else if (orders == 2 || 3 || 5 || 8 || 9 || 12 || 14 || 15){//真ん中と角四つ以外
     if(orders % 4 == 1){//左端
         delete panel[0];
         panel[1] = orders -4;
         panel[2] = orders +1;
         panel[3] = orders +4;
+        console.log("5,9");
     }else if(orders %4 == 2){
         if (orders /4 == 0){//2
             panel[0] = orders -1;
             delete panel[1];
             panel[2] = orders +1;
             panel[3] = orders +4;
+            console.log("2");
         }else{//14
             panel[0] = orders -1;
             panel[1]= orders -4;
             panel[2] = orders +1;
             delete panel[3]
+            console.log("14");
         }
     }else if (orders %4 == 3){
         if(orders /4 == 0){//3
@@ -157,17 +161,20 @@
             delete panel[1];
             panel[2] = orders +1;
             panel[3] = orders +4;
+            console.log("3");
         }else{//15
             panel[0] = orders -1;
             panel[1] = orders -4;
             panel[2] = orders +1;
             delete panel[3]
+            console.log("15");
         }
     }else{//右端 8,12
         panel[0] = orders -1;
         panel[1] = orders -4;
         delete panel[2]
         panel[3] = orders +4;
+        console.log("8,12");
     }
   }else{//角四つ
     if(orders % 4 == 1){//1,13
@@ -176,11 +183,13 @@
             delete panel[1];
             panel[2] = orders +1;
             panel[3] = orders +4;
+            console.log("1");
         }else{//13
             delete panel[0];
             panel[1] = orders -4;
             panel[2] = orders +1;
             delete panel[3]
+            console.log("13");
         }
     }else{//4,16
         if(orders ==4){
@@ -188,11 +197,13 @@
             delete panel[1];
             delete panel[2];
             panel[3] = orders + 4;
+            console.log("4");
         }else{
             panel[0] = orders -1;
             panel[1] = orders -4;
             delete panel[2];
             delete panel[3];
+            console.log("16");
         }
     }
   }
