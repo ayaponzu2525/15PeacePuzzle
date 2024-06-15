@@ -206,8 +206,28 @@
             console.log("16");
         }
     }
-    console.log(panel);
   }
+
+    function onTapped(event) {
+    findAdjacentOfEmpty();
+
+    // タップされたピースの order を取得
+    const tappedOrder = Number(event.target.style.order);
+
+    // タップされたピースの番号を取得
+    const tappedPiece = Number(event.target.innerHTML) - 1;
+
+    // タップされたピースの order が、movableOrdersModel 配列に含まれるかを調べる
+    if (movableOrdersModel.includes(tappedOrder)) {
+      const temp = ordersModel[15];
+      ordersModel[15] = tappedOrder;
+      ordersModel[tappedPiece] = temp;
+
+      component();
+    }
+  }
+
+  
 </script>
 </body>
 
