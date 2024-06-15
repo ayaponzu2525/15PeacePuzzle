@@ -149,10 +149,11 @@
         }
 
         // 1 以上の order 番号を残す処理
-        movableOrders = movableOrders.filter(x => 1 <= x);
+        movableOrders = movableOrders.filter(x => 1 <= x);//x=> 部分は引数がxということ True Falseで出力
+        //1以上のもののみ残す
 
         // 16 以下の order 番号を残す処理
-        movableOrders = movableOrders.filter(x => x <= 16);
+        movableOrders = movableOrders.filter(x => x <= 16);//16以下のもののみ残す
     }
     console.log(orders);
     findAdjacentOfEmpty();
@@ -161,24 +162,24 @@
 
   
 
-//     function onTapped(event) {
-//     findAdjacentOfEmpty();
+    function onTapped(event) {
+    findAdjacentOfEmpty();
 
-//     // タップされたピースの order を取得
-//     const tappedOrder = Number(event.target.style.order);
+    // タップされたピースの order を取得
+    const tappedOrder = Number(event.target.style.order);
 
-//     // タップされたピースの番号を取得
-//     const tappedPiece = Number(event.target.innerHTML) - 1;
+    // タップされたピースの番号を取得
+    const tappedPiece = Number(event.target.innerHTML) - 1;
 
-//     // タップされたピースの order が、movableOrdersModel 配列に含まれるかを調べる
-//     if (movableOrdersModel.includes(tappedOrder)) {
-//       const temp = ordersModel[15];
-//       ordersModel[15] = tappedOrder;
-//       ordersModel[tappedPiece] = temp;
+    // タップされたピースの order が、movableOrdersModel 配列に含まれるかを調べる
+    if (movableOrders.includes(tappedOrder)) {
+      const temp = orders[15];
+      orders[15] = tappedOrder;
+      orders[tappedPiece] = temp;
 
-//       component();
-//     }
-//   }
+      component();
+    }
+  }
 
   
 </script>
