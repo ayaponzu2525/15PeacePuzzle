@@ -128,13 +128,13 @@
   console.log(orders);
   panel = [];
 
-  if (orders == 6 || 7 || 10 || 11) {//真ん中4つ
+  if (orders == 6 || orders == 7 || orders == 10 || orders == 11) {//真ん中4つ
     panel[0] = orders -1;//左、上、右、下の順に計算し、panelというリストに番号を格納
     panel[1] = orders -4;
     panel[2] = orders +1;
     panel[3] = orders +4;
     console.log("6,7,10,11");
-  }else if (orders == 2 || 3 || 5 || 8 || 9 || 12 || 14 || 15){//真ん中と角四つ以外
+  }else if (orders == 2 || orders == 3 || orders == 5 || orders == 8 || orders == 9 || orders == 12 || orders == 14 || orders == 15){//真ん中と角四つ以外
     if(orders % 4 == 1){//左端
         delete panel[0];
         panel[1] = orders -4;
