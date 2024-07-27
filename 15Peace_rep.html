@@ -87,8 +87,11 @@
     <div class="item piece-24">24</div>
     <div class="item piece-25"></div>
   </div>
+  <div id = "count">
+    移動回数: 0
+  </div>
   <!-- ボタン押したらシャッフルするようにしたい -->
-  <button type="button", id="btn">シャッフルする</button>
+  <button type="button", value = "button" id="btn">シャッフルする</button>
   
 <script>
 // [Model] "ピースの順番を管理する配列" を用意する
@@ -97,8 +100,14 @@ var ordersModel = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1
 // [Model] 空白ピース基準で、移動が許されるピースの order を格納する
 var movableOrdersModel = [ 20, 24 ];
 
+//移動回数記録用変数
+var count = 0;
+
 // Model → View への反映部分を作成する (そのような処理を通称 "コンポーネント" と呼ぶ)
 function component() {
+  // count 変数の内容を <div id="count"> に表示する処理
+  document.getElementById("count").innerText = "移動回数: " + count;
+
   var views = document.querySelectorAll(".item");
 
   for (var index = 0; index <= 24; index = index + 1) {
@@ -115,6 +124,17 @@ function shufflePieces() {
   // Model を _.shuffle でシャッフルし、シャッフル結果を再度代入する
   // 参考 → https://lodash.com/docs/4.17.15#shuffle
   ordersModel = _.shuffle(ordersModel);
+  var views = document.querySelectorAll(".item");
+  for (var index = 0; index <= 24; index = index + 1) {
+    // Model の内容を、対応する View に反映する
+    // 今回であれば、あるピースの順番を、CSS の order に反映する
+    views[index].style.order = ordersModel[index];
+  }
+
+  count = 0;
+  component();
+  console.log('Shuffle!');
+  console.log(ordersModel);
 }
 
 // 空白ピースに対して、上下左右のピースに対応する order 番号を求める
@@ -152,6 +172,7 @@ function initializeTapOperations() {
   // 事前に、タップされた時に行ってほしいことを関数として用意しておく
   // 引数には Event が起こった時の詳細な情報が渡される
   function onTapped(event) {
+    count += 1;
     findAdjacentOfEmpty();
 
     // タップされたピースの order を取得
@@ -183,14 +204,20 @@ function initializeTapOperations() {
     elem.addEventListener('click', onTapped);
   }
 
-  let btn = document.getElementById('btn');//ボタンを押したらシャッフルするようにしたい。
-  btn.addEventListener('click', shufflePieces);
+
 }
+
+function buttonClick(){
+  console.log('btnClick!');
+}
+let btn = document.getElementById('btn');//ボタンを押したらシャッフルするようにしたい。
+btn.addEventListener('click', shufflePieces);
+btn.addEventListener('click', buttonClick);
 
 
 
 initializeTapOperations(); // 各ピースに対して、タップ時の処理を登録する (1 回のみで OK)
-shufflePieces();           // Model をシャッフルする (1 回のみで OK)
+//shufflePieces();           // Model をシャッフルする (1 回のみで OK)
 component();               // Model → View への反映を行う
 </script>
 </body>
