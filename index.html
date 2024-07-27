@@ -38,7 +38,8 @@
     background-color: #fff;
     border: 1px solid #ddd;
     text-align: center;
-    vertical-align: middle;
+    transition: transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    position: relative;
     }
 
 
@@ -79,6 +80,11 @@
     margin-top: 20px;
     cursor: pointer;
     }
+
+    .movable {
+    border: 2px solid #65ff42;
+    }
+
 
 
   </style>
@@ -149,20 +155,48 @@ function component() {
 
 
 function shufflePieces() {
-  // Model を _.shuffle でシャッフルし、シャッフル結果を再度代入する
-  // 参考 → https://lodash.com/docs/4.17.15#shuffle
-  ordersModel = _.shuffle(ordersModel);
-  var views = document.querySelectorAll(".item");
-  for (var index = 0; index <= 24; index = index + 1) {
-    // Model の内容を、対応する View に反映する
-    // 今回であれば、あるピースの順番を、CSS の order に反映する
-    views[index].style.order = ordersModel[index];
-  }
+  const shuffledOrders = _.shuffle(ordersModel);
+  const pieces = document.querySelectorAll('.item');
+  
+  // アニメーションの準備
+  pieces.forEach((piece, index) => {
+    const fromOrder = parseInt(piece.style.order);
+    const toOrder = shuffledOrders[index];
+    const fromRect = piece.getBoundingClientRect();
+    
+    // 新しい位置を設定
+    piece.style.order = toOrder;
+    
+    // アニメーションのための一時的なスタイルを設定
+    const toRect = piece.getBoundingClientRect();
+    const deltaX = fromRect.left - toRect.left;
+    const deltaY = fromRect.top - toRect.top;
+    
+    piece.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+    piece.style.transition = 'none';
+  });
+  
+  // アニメーションの実行
+  setTimeout(() => {
+    pieces.forEach((piece) => {
+      piece.style.transition = 'transform 0.5s ease-in-out';
+      piece.style.transform = 'translate(0, 0)';
+    });
+  }, 50);
+  
+  // アニメーション完了後の処理
+  setTimeout(() => {
+    pieces.forEach((piece) => {
+      piece.style.transition = '';
+      piece.style.transform = '';
+    });
+    ordersModel = shuffledOrders;
+    count = 0;
+    component();
 
-  count = 0;
-  component();
-  console.log('Shuffle!');
-  console.log(ordersModel);
+    // シャッフル後に動かせるピースの色をリセット
+    findAdjacentOfEmpty(); // 移動可能なピースの色をリセットする
+  }, 550);
 }
 
 // 空白ピースに対して、上下左右のピースに対応する order 番号を求める
@@ -192,6 +226,19 @@ function findAdjacentOfEmpty() {
 
     // 25 以下の order 番号を残す処理
     movableOrdersModel = movableOrdersModel.filter(x => x <= 25);
+    updateMovablePieces();
+}
+
+function updateMovablePieces() {
+    var elements = document.querySelectorAll(".item");
+    elements.forEach((elem) => {
+        const order = parseInt(elem.style.order);
+        if (movableOrdersModel.includes(order)) {
+            elem.classList.add('movable');
+        } else {
+            elem.classList.remove('movable');
+        }
+    });
 }
 
 function initializeTapOperations() {
@@ -203,26 +250,44 @@ function initializeTapOperations() {
     count += 1;
     findAdjacentOfEmpty();
 
-    // タップされたピースの order を取得
     const tappedOrder = Number(event.target.style.order);
-
-    // タップされたピースの番号を取得
     const tappedPiece = Number(event.target.innerHTML) - 1;
 
-    // タップされたピースの order が、movableOrdersModel 配列に含まれるかを調べる
     if (movableOrdersModel.includes(tappedOrder)) {
-      const temp = ordersModel[24];
-      ordersModel[24] = tappedOrder;
-      ordersModel[tappedPiece] = temp;
+        const emptyPiece = document.querySelector('.item:empty');
+        const tappedElement = event.target;
 
-      component();
+        const tappedRect = tappedElement.getBoundingClientRect();
+        const emptyRect = emptyPiece.getBoundingClientRect();
+
+        const pieceWidth = tappedRect.width;
+        const pieceHeight = tappedRect.height;
+
+        const deltaX = Math.round((emptyRect.left - tappedRect.left) / pieceWidth) * pieceWidth;
+        const deltaY = Math.round((emptyRect.top - tappedRect.top) / pieceHeight) * pieceHeight;
+
+        tappedElement.style.zIndex = '10';
+        tappedElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+        setTimeout(() => {
+            const temp = ordersModel[24];
+            ordersModel[24] = tappedOrder;
+            ordersModel[tappedPiece] = temp;
+
+            tappedElement.style.transform = '';
+            tappedElement.style.zIndex = '';
+
+            component();
+
+            findAdjacentOfEmpty(); // 移動後のピースに対して色を更新
+
+            if (String(ordersModel) === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25') {
+                setTimeout(() => alert(count + '回でクリア！'), 0);
+            }
+        }, 150);
     }
+}
 
-    // 数字が順番に並んでいるかの判定を行う
-    if (String(ordersModel) === '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25') {
-      setTimeout(() => alert(count + '回でクリア！'), 0);
-    };
-  }
 
   // elements 変数 (配列) の中身を for 文でひとつずつ取り出す
   for (var elem of elements) {
@@ -234,6 +299,8 @@ function initializeTapOperations() {
 
 
 }
+// 初期状態で動かせるピースを更新
+updateMovablePieces();
 
 function buttonClick(){
   console.log('btnClick!');
