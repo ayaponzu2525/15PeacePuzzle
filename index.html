@@ -8,24 +8,39 @@
   <title>15 パズル</title>
 
   <style>
+    body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    }
+
     .container {
-      width: 450px;
-      height: 450px;
-      border: 1px solid red;
-      display: flex;
-      flex-wrap: wrap;
+    width: 450px;
+    height: 450px;
+    border: 2px solid #333;
+    display: flex;
+    flex-wrap: wrap;
     }
 
     .item {
-      width: 90px;
-      height: 90px;
-      line-height: 90px;
-      border: 1px solid blue;
-      box-sizing: border-box;
-      background-color: aliceblue;
-      text-align: center;
-      vertical-align: middle;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
     }
+
 
     .piece-1  { order: 1;  }
     .piece-2  { order: 2;  }
@@ -52,6 +67,19 @@
     .piece-23 { order: 23; }
     .piece-24 { order: 24; }
     .piece-25 { order: 25; }
+
+    #count, #timer {
+    font-size: 1.2em;
+    margin-top: 10px;
+    }
+
+    button {
+    padding: 10px 20px;
+    font-size: 1.2em;
+    margin-top: 20px;
+    cursor: pointer;
+    }
+
 
   </style>
 
