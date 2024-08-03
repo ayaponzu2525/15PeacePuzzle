@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24 ピースパズル</title>
+  <link href="https://unpkg.com/nes.css@latest/css/nes.min.css" rel="stylesheet" />
+  <link href="https://unpkg.com/nes.css/css/nes-core.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Press Start 2P', cursive;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, 90px);
+      grid-template-rows: repeat(5, 90px);
+      gap: 2px;
+      margin-bottom: 20px;
+    }
+    .tile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 90px;
+      height: 90px;
+      border: 1px solid #000;
+      font-size: 24px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="board">
+      <div v-for="(tile, index) in tiles" :key="index" class="tile" @click="moveTile(index)">
+        {{ tile }}
+      </div>
+    </div>
+    <div>移動回数: {{ moveCount }}</div>
+    <button class="nes-btn is-primary" @click="shuffleTiles">シャッフルする</button>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          tiles: [...Array(24).keys()].map(i => i + 1),
+          moveCount: 0
+        };
+      },
+      methods: {
+        moveTile(index) {
+          const emptyIndex = this.tiles.indexOf('');
+          const row = Math.floor(index / 5);
+          const col = index % 5;
+          const emptyRow = Math.floor(emptyIndex / 5);
+          const emptyCol = emptyIndex % 5;
+
+          if ((Math.abs(row - emptyRow) === 1 && col === emptyCol) ||
+              (Math.abs(col - emptyCol) === 1 && row === emptyRow)) {
+            this.tiles[emptyIndex] = this.tiles[index];
+            this.tiles[index] = '';
+            this.moveCount++;
+          }
+        },
+        shuffleTiles() {
+          for (let i = this.tiles.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.tiles[i], this.tiles[j]] = [this.tiles[j], this.tiles[i]];
+          }
+          this.moveCount = 0;
+        }
+      },
+      mounted() {
+        this.tiles.push('');
+        this.shuffleTiles();
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>

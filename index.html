@@ -247,7 +247,7 @@ function initializeTapOperations() {
   // 事前に、タップされた時に行ってほしいことを関数として用意しておく
   // 引数には Event が起こった時の詳細な情報が渡される
   function onTapped(event) {
-    count += 1;
+    
     findAdjacentOfEmpty();
 
     const tappedOrder = Number(event.target.style.order);
@@ -276,6 +276,8 @@ function initializeTapOperations() {
 
             tappedElement.style.transform = '';
             tappedElement.style.zIndex = '';
+
+            count += 1;
 
             component();
 
